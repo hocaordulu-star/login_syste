@@ -1,0 +1,164 @@
+:root {
+  /* Spacing scale (rem-based) */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+
+  /* Radius & shadow */
+  --radius-sm: 0.375rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  /* Durations */
+  --dur-fast: 150ms;
+  --dur: 250ms;
+
+  /* Z-index */
+  --z-header: 1000;
+  --z-overlay: 1199;
+  --z-sidebar: 1200;
+
+  /* Breakpoints */
+  --bp-xs: 360px;
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+
+  /* Container widths */
+  --container-sm: 600px;
+  --container-md: 800px;
+  --container-lg: 1100px;
+  --container-xl: 1280px;
+
+  /* Brand Palette: Pink, Pastel Light Blue, Deep Navy */
+  --primary: #ff6b9e;            /* rose/pink */
+  --primary-dark: #e45788;       /* deeper pink */
+  --primary-light: #ff8fb6;      /* soft light pink */
+  --secondary: #a5d8ff;          /* pastel light blue */
+  --accent: #89c2ff;             /* blue accent for CTAs */
+  --accent-dark: #5aa6ff;        /* hover for accent */
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  
+  /* Background Colors */
+  /* Site-wide background (beige) */
+  --bg-primary: #f5efe6;
+  --bg-secondary: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.86));
+  --surface: #ffffff;
+  --surface-2: rgba(255, 255, 255, 0.95);
+  --surface-3: rgba(255, 255, 255, 0.9);
+  --border: rgba(255, 255, 255, 0.2);
+  --text: #1f2937;
+  --text-light: #4b5563;
+  --text-muted: #6b7280;
+  
+  /* Panel specific overrides */
+  --bg: #f8fafc;
+  --panel-bg: #ffffff;
+  --muted: #6b7280;
+  --primary-contrast: #ffffff;
+  --overlay: rgba(0, 0, 0, 0.5);
+}
+
+/* Explicit light theme to override system dark preference when user selects light */
+[data-theme="light"] {
+  /* Brand Palette: Pink, Pastel Light Blue, Deep Navy */
+  --primary: #ff6b9e;
+  --primary-dark: #e45788;
+  --primary-light: #ff8fb6;
+  --secondary: #a5d8ff;
+  --accent: #89c2ff;
+  --accent-dark: #5aa6ff;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  
+  /* Background Colors */
+  --bg-primary: #f5efe6;
+  --bg-secondary: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.86));
+  --surface: #ffffff;
+  --surface-2: rgba(255, 255, 255, 0.95);
+  --surface-3: rgba(255, 255, 255, 0.9);
+  --border: rgba(255, 255, 255, 0.2);
+  --text: #1f2937;
+  --text-light: #4b5563;
+  --text-muted: #6b7280;
+  
+  /* Panel specific overrides */
+  --bg: #f8fafc;
+  --panel-bg: #ffffff;
+  --muted: #6b7280;
+  --primary-contrast: #ffffff;
+  --overlay: rgba(0, 0, 0, 0.5);
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg-primary: linear-gradient(135deg, #0b1220 0%, #0f1a2d 100%); /* deep navy */
+  --bg-secondary: linear-gradient(135deg, rgba(11, 18, 32, 0.95), rgba(15, 26, 45, 0.88));
+  --surface: #0b1220;
+  --surface-2: rgba(11, 18, 32, 0.95);
+  --surface-3: rgba(15, 26, 45, 0.92);
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #f1f5f9;
+  --text-light: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  /* Panel specific overrides */
+  --bg: #070d18;                /* deepest background */
+  --panel-bg: #101826;          /* navy panel */
+  --muted: #9ca3af;
+  --primary-contrast: #070d18;
+  --overlay: rgba(0, 0, 0, 0.6);
+}
+
+/* Respect user preference as a baseline */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg-primary: linear-gradient(135deg, #0b1220 0%, #0f1a2d 100%);
+    --bg-secondary: linear-gradient(135deg, rgba(11, 18, 32, 0.95), rgba(15, 26, 45, 0.88));
+    --surface: #0b1220;
+    --surface-2: rgba(11, 18, 32, 0.95);
+    --surface-3: rgba(15, 26, 45, 0.92);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #f1f5f9;
+    --text-light: #cbd5e1;
+    --text-muted: #94a3b8;
+    
+    /* Panel specific overrides */
+    --bg: #070d18;
+    --panel-bg: #101826;
+    --muted: #9ca3af;
+    --primary-contrast: #070d18;
+    --overlay: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* iOS safe areas */
+.safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Base layout helpers */
+.container {
+  max-width: var(--container-lg);
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
+@media (min-width: 1280px) {
+  .container { max-width: var(--container-xl); }
+}
+@media (max-width: 768px) {
+  .container { padding-inline: var(--space-3); }
+}

@@ -1,0 +1,1126 @@
+/* Teacher Panel Styles - Modern & Responsive */
+/*
+ Öğretmen Paneli için modern ve responsive CSS stilleri.
+ Bu dosya; sidebar, üst başlık, arama/tema butonları, içerik alanı,
+ dashboard kartları, formlar, tablolar, rozetler, modallar, bildirimler
+ ve responsive kuralları kapsar. Yalnızca açıklama eklendi; stil davranışı değişmedi.
+*/
+
+:root {
+    /* Color Variables
+     Tema renk değişkenleri: birincil/ikincil ve durum renkleri.
+     Bu değişkenler tüm bileşenlerde tutarlı renk kullanımı sağlar. */
+    --primary: var(--primary, #667eea);
+    --primary-dark: var(--primary-dark, #5a67d8);
+    --primary-light: var(--primary-light, #7c3aed);
+    --secondary: var(--secondary, #764ba2);
+    --success: var(--accent, #10b981);
+    --danger: var(--danger, #ef4444);
+    --warning: var(--warning, #f59e0b);
+    --info: var(--info, #3b82f6);
+    
+    /* Neutral Colors – use global tokens */
+    --bg: var(--bg, #f8fafc);
+    --surface: var(--surface, #ffffff);
+    --surface-2: var(--surface-2, rgba(255,255,255,0.95));
+    --border: var(--border, rgba(0,0,0,0.08));
+    --border-light: var(--border, rgba(0,0,0,0.06));
+    --text: var(--text, #1f2937);
+    --text-light: var(--text-light, #4b5563);
+    --text-muted: var(--text-muted, #6b7280);
+    
+    /* Gradients - Pastel Lavender & Mint Theme */
+    --gradient-primary: linear-gradient(135deg, var(--primary, #d8b4fe), var(--secondary, #a5f3fc));
+    --gradient-secondary: linear-gradient(135deg, var(--accent, #f0abfc), var(--primary-light, #e9d5ff));
+    --gradient-bg: var(--bg-primary, linear-gradient(135deg, #faf5ff 0%, #f0f9ff 25%, #f0fdfa 50%, #fffbeb 75%, #fef7f7 100%));
+    
+    /* Shadows
+     Kart ve üst öğeler için gölge derinlik hiyerarşisi. */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    
+    /* Spacing
+     Bileşenler arası boşluklar (rem tabanlı). */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* Border Radius
+     Köşe yuvarlatma değerleri (küçükten büyüğe). */
+    --radius-sm: 0.375rem;
+    --radius: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    
+    /* Transitions
+     Etkileşimlerde kullanılan animasyon geçiş süreleri. */
+    --transition: all 0.2s ease;
+    --transition-slow: all 0.3s ease;
+}
+
+/* Dark Mode Support */
+/*
+ data-theme="dark" olduğunda açık/nötr tonlar daha koyu halleriyle değişir.
+ Bu sayede karanlık tema anında ve tutarlı şekilde uygulanır.
+*/
+[data-theme="dark"] {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #334155;
+    --border: #475569;
+    --border-light: #334155;
+    --text: #f1f5f9;
+    --text-light: #cbd5e1;
+    --text-muted: #94a3b8;
+}
+
+/* Base Styles */
+/*
+ Temel reset ve tipografi/arka plan tanımları.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Poppins', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+    background: var(--bg-primary);
+    background-attachment: fixed;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 40% 40%, rgba(167, 139, 250, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 60% 60%, rgba(139, 156, 255, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+    animation: colorShift 30s ease-in-out infinite, gentleFloat 20s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(118, 75, 162, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    animation: particleFloat 25s ease-in-out infinite reverse;
+}
+
+@keyframes colorShift {
+    0%, 100% { 
+        filter: hue-rotate(0deg) saturate(1);
+        transform: scale(1);
+    }
+    25% { 
+        filter: hue-rotate(90deg) saturate(1.2);
+        transform: scale(1.05);
+    }
+    50% { 
+        filter: hue-rotate(180deg) saturate(0.8);
+        transform: scale(1.1);
+    }
+    75% { 
+        filter: hue-rotate(270deg) saturate(1.1);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+@keyframes particleFloat {
+    0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
+    66% { transform: translateY(10px) translateX(-15px) rotate(240deg); }
+}
+
+/* Layout Components */
+/*
+ Ana konteyner ve iki sütunlu ızgara düzeni:
+ Sol: sidebar (280px), Sağ: ana içerik (1fr).
+*/
+.teacher-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+.teacher-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: calc(100vh - 3rem);
+}
+
+/* Sidebar */
+/*
+ Sol menü: marka alanı, navigasyon listesi ve rozetler.
+ Gradyan arka plan üzerinde beyaz metin kullanılır.
+*/
+.teacher-sidebar {
+    background: var(--gradient-primary);
+    color: white;
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure off-canvas sidebar from components.css stacks above content */
+.teacher-sidebar.sidebar { z-index: var(--z-sidebar, 1200); }
+
+.teacher-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.teacher-brand-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.teacher-brand-text h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+}
+
+.teacher-brand-text p {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.teacher-nav {
+    flex: 1;
+}
+
+.teacher-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.teacher-nav-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.teacher-nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.teacher-nav-link:hover,
+.teacher-nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateX(4px);
+}
+
+.teacher-nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.nav-badge {
+    background: var(--danger);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+    font-weight: 600;
+}
+
+/* Main Content */
+/*
+ Sağ sütun: üst yapışkan başlık ve kaydırılabilir içerik alanı.
+*/
+.teacher-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.teacher-header {
+    /* Üst bar: sticky, arama ve kullanıcı/tema kontrollerini içerir. */
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.teacher-header-left h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.teacher-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.teacher-search {
+    position: relative;
+}
+
+.teacher-search input {
+    /* Arama alanı: sol içe ikon boşluğu, focus halkası. */
+    width: 300px;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+    font-size: 0.875rem;
+    transition: var(--transition);
+}
+
+.teacher-search input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.teacher-search i {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.theme-toggle {
+    /* Tema değiştirici: hover'da birincil renge dönüşür. */
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-light);
+}
+
+.theme-toggle:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.teacher-user {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.teacher-avatar {
+    /* Kullanıcı avatarı: dairesel, gradyan arka plan, baş harfler. */
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+/* Content Area */
+/*
+ Kaydırılabilir içerik bölgesi; arka plan olarak sayfa arka planı kullanılır.
+*/
+.teacher-content {
+    flex: 1;
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    background: var(--bg);
+}
+
+/* Dashboard Cards */
+/*
+ İstatistik kartları ızgarası ve kart bileşenleri.
+ Hover'da hafif yükselme ve daha yoğun gölge efekti.
+*/
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.stat-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-card-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.stat-card-icon.primary { background: rgba(139, 92, 246, 0.1); color: var(--primary); }
+.stat-card-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+.stat-card-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+.stat-card-icon.info { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+
+.stat-card-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-card-change {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.875rem;
+}
+
+.stat-card-change.positive { color: var(--success); }
+.stat-card-change.negative { color: var(--danger); }
+
+/* Content Sections */
+/*
+ İçerik bölümleri: başlık (.section-header) ve gövde (.section-body).
+ Sağ üstte aksiyon butonları yer alabilir.
+*/
+.content-section {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-header {
+    background: var(--surface-2);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.section-title i {
+    color: var(--primary);
+}
+
+.section-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.section-body {
+    padding: var(--spacing-xl);
+}
+
+/* Forms */
+/*
+ Form yapısı: grid tabanlı düzen, label + input/select/textarea kombinasyonu.
+ Odak durumunda birincil vurgu gösterilir.
+*/
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.form-label i {
+    color: var(--primary);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    padding: var(--spacing-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 0.875rem;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.file-upload {
+    /* Dosya yükleme alanı: kesikli kenarlık, hover'da mor vurgulu arka plan. */
+    position: relative;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.file-upload:hover {
+    border-color: var(--primary);
+    background: rgba(139, 92, 246, 0.02);
+}
+
+.file-upload input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.file-upload-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 20px;
+}
+
+/* Buttons */
+/*
+ Genel buton stilleri ve varyantlar (primary/secondary/success/danger, sm/lg).
+*/
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    justify-content: center;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--border);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-sm {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.75rem;
+}
+
+.btn-lg {
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    font-size: 1rem;
+}
+
+/* Tables */
+/*
+ Tablo kabı ve tablo temel stilleri: başlık satırı, hücreler ve hover satır rengi.
+ Mobilde yatay kaydırma için min-width alt @media'da tanımlanır.
+*/
+.table-container {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+}
+
+.table th {
+    background: var(--surface-2);
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: top;
+}
+
+.table tr:hover {
+    background: var(--surface-2);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status Badges */
+/*
+ Durum rozetleri: pending/approved/rejected için renk kodlu arka plan ve metin.
+*/
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #92400e;
+}
+
+.badge-approved {
+    background: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+}
+
+.badge-rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: #991b1b;
+}
+
+/* Action Buttons */
+/*
+ Kart veya tablo satırı içerisindeki küçük ikon butonları.
+ Hover'da hafif yükselme animasyonu uygulanır.
+*/
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.action-btn {
+    padding: var(--spacing-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-edit {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+}
+
+.btn-delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.btn-view {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+/* Filters */
+/*
+ Filtre alanı: esnek sarılabilir düzen, küçük başlık (.filter-label) ve grup.
+*/
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--surface-2);
+    border-radius: var(--radius);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    min-width: 150px;
+}
+
+.filter-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Pagination */
+/*
+ Sayfalama butonları: aktif/hover durumunda birincil vurgu.
+*/
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border);
+}
+
+.pagination-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.pagination-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.pagination-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Notifications */
+/*
+ Sağ üstte beliren bildirim kartı: .show ile içeri kayar.
+ Durum sınıfları: .notification-success/.error/.warning (sol şerit rengi).
+*/
+.notification {
+    position: fixed;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    max-width: 400px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-success {
+    border-left: 4px solid var(--success);
+}
+
+.notification-error {
+    border-left: 4px solid var(--danger);
+}
+
+.notification-warning {
+    border-left: 4px solid var(--warning);
+}
+
+/* Modals */
+/*
+ Tam ekran yarı saydam arka plan; .show ile görünür.
+ İç kutu (.modal-content) ölçek animasyonu ile belirir.
+*/
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-slow);
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: var(--transition-slow);
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: var(--surface-2);
+    color: var(--text);
+}
+
+.modal-body {
+    padding: var(--spacing-xl);
+}
+
+.modal-footer {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+/* Loading States */
+/*
+ Küçük yükleniyor göstergesi: dönen dairesel spinner.
+*/
+.loading {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--text-muted);
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border);
+    border-top: 2px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty States */
+/*
+ İçerik yok mesajı: ikon + başlık + açıklama.
+*/
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-light);
+}
+
+/* Responsive Design */
+/*
+ Breakpoint'ler:
+ - 1024px: Sidebar gizlenir, tek sütun; grid kolon sayıları azalır.
+ - 768px: Header dikey dizilir, içerik padding küçülür, modallar daha dar.
+ - 480px: Tablolar yatay kaydırılabilir olur (min-width uygulanır).
+*/
+@media (max-width: 1024px) {
+    .teacher-layout {
+        grid-template-columns: 1fr;
+    }
+    /* Make sure header hamburger (btn-icon) is visible on mobile */
+    .teacher-header-right .btn-icon { display: inline-flex; }
+
+    /* Force off-canvas behavior explicitly for teacher sidebar */
+    .teacher-sidebar.sidebar {
+        position: fixed;
+        inset-block: 0;
+        inset-inline-start: 0;
+        inline-size: 280px;
+        transform: translateX(-100%);
+        transition: transform var(--dur, 250ms) ease;
+    }
+    .teacher-sidebar.sidebar.is-open {
+        transform: translateX(0);
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-md);
+    }
+    
+    .teacher-header {
+        padding: var(--spacing-md);
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .teacher-header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .teacher-search input {
+        width: 100%;
+    }
+    
+    .teacher-content {
+        padding: var(--spacing-md);
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        padding: var(--spacing-md);
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: stretch;
+    }
+    
+    .section-body {
+        padding: var(--spacing-md);
+    }
+    
+    .filters {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        min-width: auto;
+    }
+    
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .table {
+        min-width: 600px;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+    }
+}

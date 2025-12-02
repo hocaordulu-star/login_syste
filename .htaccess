@@ -1,0 +1,13 @@
+# Security and anti-injection headers
+<IfModule mod_headers.c>
+  # Strict Content Security Policy. Adjust domains only if you intentionally add new external resources.
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://errors.infinityfree.net; style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: https://images.unsplash.com https://i.ytimg.com https://img.youtube.com https://errors.infinityfree.net; connect-src 'self'; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com; child-src 'self' https://www.youtube-nocookie.com https://www.youtube.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+
+  # Additional security headers
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), microphone=()"
+</IfModule>
+
+# Fallback if mod_headers is not available (some shared hosts)

@@ -1,0 +1,11 @@
+{
+  "name": "Login System",
+  "short_name": "Login",
+  "start_url": "/login-system/",
+  "scope": "/login-system/",
+  "display": "standalone",
+  "theme_color": "#0d6efd",
+  "background_color": "#ffffff",
+  "prefer_related_applications": false,
+  "categories": ["education", "productivity"]
+}

@@ -1,0 +1,963 @@
+/**
+ * =====================================================
+ * MATEMATİK VİDEO SİSTEMİ - ANA STİL DOSYASI
+ * Tüm matematik sayfalarının ortak stilleri
+ *
+ * Türkçe Açıklama:
+ * Bu dosya; sayfa başlığı, filtre araç çubuğu, sekmeler, ünite/videolar ızgarası,
+ * video kartı ve oynatıcı, durum rozetleri, aksiyon butonları, modal, yükleme
+ * spinner'ı ve responsive kurallar gibi bileşenlerin görsel stilini tanımlar.
+ * Değişkenler üzerinden tema yönetimi ve gölge/yuvarlatma/boşluk gibi tasarım
+ * sistemleri merkezi şekilde yönetilir.
+ * =====================================================
+ */
+
+/* CSS Variables - Tema renkleri ve boyutlar */
+/*
+ Tema Değişkenleri:
+ - Renk paleti: metin, yüzey (kart), uyarı/durum renkleri
+ - Boyutlar: border-radius, spacing, gölgeler ve geçiş süreleri
+ Bu değerleri değiştirerek tüm sayfanın görünümü hızlıca uyarlanabilir.
+*/
+:root {
+  /* Bind math page variables to global tokens to enable theming */
+  --bg-gradient: var(--bg-primary);
+  --text-primary: var(--text, #1f2937);
+  --text-muted: var(--text-muted, #6b7280);
+  --surface-primary: var(--surface, #ffffff);
+  --surface-secondary: var(--surface-2, rgba(255, 255, 255, 0.95));
+  --border-light: var(--border, rgba(0,0,0,0.08));
+  --primary: var(--primary, #667eea);
+  --primary-light: color-mix(in oklab, var(--primary, #667eea) 15%, transparent);
+  --success: var(--accent, #10b981);
+  --warning: var(--warning, #f59e0b);
+  --danger: var(--danger, #ef4444);
+  --border-radius: 12px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --transition-normal: 0.2s ease;
+}
+
+/* Temel reset ve genel stiller */
+/*
+ Taban stil reseti: kutu modeli, margin ve padding sıfırlaması.
+*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /*
+   Soft mavi-pembe gradyan arka plan, okunabilir satır yüksekliği ve sistem fontları.
+  */
+  font-family: 'Poppins', system-ui, Arial;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 40% 40%, rgba(167, 139, 250, 0.1) 0%, transparent 60%),
+    radial-gradient(circle at 60% 60%, rgba(139, 156, 255, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+  animation: colorShift 30s ease-in-out infinite, gentleFloat 20s ease-in-out infinite;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(118, 75, 162, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: particleFloat 25s ease-in-out infinite reverse;
+}
+
+@keyframes colorShift {
+  0%, 100% { 
+    filter: hue-rotate(0deg) saturate(1);
+    transform: scale(1);
+  }
+  25% { 
+    filter: hue-rotate(90deg) saturate(1.2);
+    transform: scale(1.05);
+  }
+  50% { 
+    filter: hue-rotate(180deg) saturate(0.8);
+    transform: scale(1.1);
+  }
+  75% { 
+    filter: hue-rotate(270deg) saturate(1.1);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
+  66% { transform: translateY(10px) translateX(-15px) rotate(240deg); }
+}
+
+.container {
+  /* İçeriği merkezleyen ve kenarlardan iç boşluk veren sarmalayıcı. */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+/* Sayfa başlığı */
+/*
+ Üstteki karşılayıcı başlık alanı: cam efekti (blur), geniş padding ve gölge.
+ Ortalanmış tipografi ile bölümün tanımı verilir.
+*/
+.page-header {
+  background: var(--surface-secondary);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.page-title {
+  /* Siyah metin rengi */
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: var(--spacing-sm);
+}
+
+.page-subtitle {
+  /* Başlık altı açıklama metni: daha soluk tonda. */
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.lgs-badge {
+  /* LGS rozeti: uyarı (sarı) gradyan, beyaz metin ve kapsül form. */
+  display: inline-block;
+  background: linear-gradient(135deg, var(--warning), #d97706);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-top: var(--spacing-sm);
+}
+
+/* Sınıf seçici */
+/*
+ Sınıf (grade) seçimi için merkezde hizalanmış satır ve geniş boşluklar.
+*/
+.grade-selector {
+  margin: var(--spacing-md) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.grade-selector select {
+  /* Select kontrolü: kalın kenarlık, yuvarlatma ve beyaz yüzey. */
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius);
+  background: var(--surface-primary);
+  font-family: inherit;
+}
+
+/* Upload butonu */
+/*
+ Video yükleme butonu: başarı (yeşil) gradyan, ikon + metin için esnek hizalama,
+ hover'da hafif yukarı hareket ve ışıltılı gölge.
+*/
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: white;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 600;
+  margin: var(--spacing-md) 0;
+  transition: var(--transition-normal);
+}
+
+.upload-button:hover {
+  /* Hover etkisi: yumuşak yukarı kayma ve yeşil gölge. */
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+/* Filtre toolbar */
+/*
+ Filtreler için esnek ve sarılabilir araç çubuğu: blur efektli yarı saydam yüzey,
+ form alanları ve iki aksiyon butonu (.filter-button, .clear-filters-button).
+*/
+.toolbar {
+  background: var(--surface-secondary);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  padding: var(--spacing-lg);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  /* Etiket + kontrol dikey istifli; min genişlik verilip esnek büyütülür. */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+  flex: 1;
+}
+
+.filter-group label {
+  /* Etiket metni: orta kalın ve soluk renk. */
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.toolbar input,
+.toolbar select {
+  /* Form kontrolleri: kalın kenarlık, yuvarlatma ve odak gölgesi. */
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius);
+  outline: none;
+  background: var(--surface-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: var(--transition-normal);
+  width: 100%;
+}
+
+.toolbar input:focus,
+.toolbar select:focus {
+  /* Odakta birincil renge vurgu ve yumuşak halka gölge. */
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.filter-button,
+.clear-filters-button {
+  /* Aksiyon butonları: koyu gradyan ve tezat metin; birlikte hizalanır. */
+  background: linear-gradient(135deg, #1f2937, #374151);
+  color: white;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.clear-filters-button {
+  /* Temizle butonu: tehlike (kırmızı) gradyan. */
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+}
+
+.filter-button:hover,
+.clear-filters-button:hover {
+  /* Hover: hafif yükselme ve orta gölge. */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Sekme sistemi */
+/*
+ Sekmeler (tabs): arka planı yarı saydam kutu ve içerisinde .tab elemanları.
+ .tab.active durumu vurgulu arka plan ve çerçeve ile belirtilir.
+*/
+.tabs {
+  display: flex;
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+  background: var(--surface-secondary);
+  backdrop-filter: blur(20px);
+  padding: var(--spacing-md);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+}
+
+.tab {
+  /* Sekme düğmesi: şeffaf arka plan, hover'da yumuşak renk değişimi. */
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-normal);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.tab.active {
+  /* Aktif sekme: birincil renge dönük vurgu ve çerçeve. */
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.tab:hover:not(.active) {
+  /* Hover: aktif olmayan sekmede yumuşak arka plan. */
+  background: rgba(102, 126, 234, 0.05);
+  color: var(--text-primary);
+}
+
+.tab-content {
+  /* Sekmeye bağlı içerik: yalnızca .active olan görünür. */
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Sonuç bilgisi */
+/*
+ Filtre sonrası sonuç özet alanı: sayım ve aktif filtre rozetleri.
+ Küçük ekranlar için sarılabilir yapı.
+*/
+.results-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.result-count {
+  /* Bulunan sonuç sayısını gösterir. */
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.active-filters {
+  /* Aktif filtreleri birincil renkle vurgular. */
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Ünite sections */
+/*
+ Ünite başlıkları ve her üniteye ait video ızgarası için kapsayıcılar.
+ .unit-section: cam efekti, gölge ve yumuşak kenarlar.
+*/
+.video-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.unit-section {
+  /* Bölüm kartı: blur, gölge ve ince beyaz kenarlık. */
+  background: var(--surface-secondary);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.unit-header {
+  /* Altı çizgili başlık satırı ve dikey aralık. */
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.unit-title {
+  /* Başlık satırı: ikon + metin, kalın tipografi. */
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.unit-title i {
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+
+.video-count-badge {
+  /* Sağda video sayısı rozeti: birincil renk vurgusu. */
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 4px var(--spacing-sm);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Video grid */
+/*
+ Videoları otomatik sığacak şekilde ızgaraya dizer. min 300px, eşit dağılım.
+*/
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.video-card {
+  /* Video kartı: beyaz yüzey, ince kenarlık, gölge; hover'da yükselir. */
+  background: var(--surface-primary);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+  border: 1px solid #f1f5f9;
+  position: relative;
+}
+
+.video-card:hover {
+  /* Hover: hafif yukarı kayma ve daha derin gölge. */
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Video player */
+/*
+ 16:9 oran (56.25%) için padding-bottom tekniği. iframe mutlak konumlanır.
+ .small varyantı: 32:9 (28.125%) gibi daha yatay oran.
+*/
+.video-player {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.video-player iframe {
+  /* Oynatıcıyı kapsayıcıya tam sığdırır, border kaldırılır. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-player.small {
+  /* Küçük varyant: daha az yüksekliğe sahip oran. */
+  padding-bottom: 28.125%;
+}
+
+.video-placeholder {
+  /* Video yokken görünen yer tutucu: merkezlenmiş metin ve gradyan arka plan. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+/* Video kontroller */
+/*
+ Kartın sağ üstünde yer alan yer imi (bookmark) ve benzeri kontrol butonları.
+*/
+.video-controls {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-sm);
+  z-index: 10;
+}
+
+.bookmark-btn {
+  /* Dairesel, yarı saydam siyah arka plan; hover'da koyulaşır. */
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bookmark-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.bookmark-btn.bookmarked {
+  /* Kaydedildi durumunda sarı arka plan. */
+  background: var(--warning);
+}
+
+.progress-indicator {
+  /* Kart altındaki ince ilerleme kanalını tanımlar. */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.progress-bar {
+  /* İlerleme çubuğu: yeşil renk, genişlik JS ile güncellenir. */
+  height: 100%;
+  background: var(--success);
+  transition: width 0.3s ease;
+}
+
+/* Video content */
+/*
+ Kart altındaki metin içerikleri: başlık, konu, istatistik ve aksiyonlar.
+*/
+.video-content {
+  padding: var(--spacing-lg);
+}
+
+.video-title {
+  /* Video başlığı: kalın ve sıkı satır yüksekliği. */
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.4;
+}
+
+.video-meta {
+  margin-bottom: var(--spacing-md);
+}
+
+.video-topic {
+  /* Konu etiketi: açık gri arka plan ve ince kenarlık. */
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.video-stats {
+  /* Görüntülenme, beğeni vb. sayıları yatayda listeler, sarılabilir. */
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.video-actions {
+  /* Solda rozet(ler) sağda aksiyon butonları; satır sonlandırılabilir yapı. */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/* Status badges */
+/*
+ Durum rozetleri: onaylandı, beklemede, reddedildi gibi etiketler.
+ Renkler erişilebilirlik için yüksek kontrastta seçilmiştir.
+*/
+.status-badge {
+  display: inline-block;
+  padding: 6px var(--spacing-md);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-approved {
+  /* Onaylandı: yeşil zemin ve koyu yeşil metin. */
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pending {
+  /* Beklemede: sarı zemin ve kahverengi metin. */
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.status-rejected {
+  /* Reddedildi: kırmızı zemin ve koyu kırmızı metin. */
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Action buttons */
+/*
+ Aksiyon butonları: quiz ve notlar; küçük boyutlu, yuvarlatılmış ve hover animasyonlu.
+*/
+.quiz-btn,
+.notes-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 6px var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+}
+
+.quiz-btn:hover,
+.notes-btn:hover {
+  transform: translateY(-1px);
+}
+
+.notes-btn {
+  /* Notlar butonu mavi renkle ayrıştırılır. */
+  background: #3b82f6;
+}
+
+/* Teacher videos */
+/*
+ Öğretmen videoları için özel başlık ve kart vurgusu.
+ .teacher-video: sol tarafta birincil renkli şerit.
+*/
+.teacher-videos-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+}
+
+.teacher-video {
+  /* Sol kenarda birincil renkli vurgu şeridi. */
+  border-left: 4px solid var(--primary);
+}
+
+.video-header {
+  /* Kart üst bilgi şeridi: başlık/etiketler sol, aksiyonlar sağ. */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-md);
+}
+
+.video-info {
+  /* Başlık altı bilgi satırları (öğretmen adı, tarih vb.). */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: var(--spacing-md);
+}
+
+.info-row {
+  /* İkon + metin uyumlu hizalama ve ufak aralık. */
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.video-performance {
+  /* Performans göstergeleri: iki sütunlu küçük özet kartları. */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-light);
+}
+
+.perf-item {
+  /* Tekil performans öğesi: dikey istif, ortalanmış. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.perf-label {
+  /* Etiket: daha küçük ve soluk. */
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.perf-value {
+  /* Değer: birincil renkle vurgulu. */
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Empty state */
+/*
+ Sonuç yoksa görünen durum kartı: kesik kenarlık, merkezlenmiş simge ve metin.
+ video-grid içinde tüm sütunları kaplayacak şekilde konumlanır.
+*/
+.empty-state {
+  padding: var(--spacing-xl) var(--spacing-lg);
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--surface-primary);
+  border-radius: 16px;
+  border: 2px dashed var(--border-light);
+  grid-column: 1 / -1;
+}
+
+.empty-state i {
+  /* Büyük ikon ve altına dikey boşluk. */
+  font-size: 3rem;
+  color: var(--border-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.empty-state h3 {
+  /* Durum başlığı. */
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+/* Modal */
+/*
+ Tam ekran yarı saydam arka plan; .modal.active iken ortalanmış içerik kutusu
+ (.modal-content) görünür. Başlıkta kapatma butonu (.close-btn) bulunur.
+*/
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal.active {
+  /* Modal görünür ve içerik ortalanır. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  /* İçerik kutusu: kart görünümü, maksimum genişlik/yükseklik sınırları. */
+  background: var(--surface-primary);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 600px;
+  overflow: hidden;
+}
+
+.modal-header {
+  /* Başlık şeridi: alt çizgi, açık arka plan ve hizalama. */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-light);
+  background: #f8fafc;
+}
+
+.close-btn {
+  /* Kapatma düğmesi: dairesel hover zemin ve kırmızı vurgu. */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px;
+  border-radius: 50%;
+  transition: var(--transition-normal);
+}
+
+.close-btn:hover {
+  /* Hover: açık kırmızı zemin ve tehlike rengi metin. */
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+.modal-body {
+  /* İçerik alanı: taşma durumunda dikey kaydırma. */
+  padding: var(--spacing-lg);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Loading spinner */
+/*
+ Tam ekran yükleme katmanı: beyaz yarı saydam örtü + merkezde dönen spinner.
+ .active iken görünür. Z-index yüksek tutulur.
+*/
+.loading-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.loading-spinner.active {
+  /* Aktif olduğunda esnek kapsayıcı görünür. */
+  display: flex;
+}
+
+.spinner {
+  /* Dönen daire: üst kenar birincil renkte, 1s'te 360° döner. */
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  /* Sürekli dönme animasyonu. */
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+/*
+ 768px ve altı ekranlar için:
+ - .container iç boşluğu azalır
+ - .toolbar dikey istiflenir, .filter-group min genişlik kaldırılır
+ - .video-grid tek sütuna düşer, .page-title küçülür
+ - .unit-section iç boşluğu azaltılır, .tabs yatay kaydırılabilir olur
+*/
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-group {
+    min-width: auto;
+  }
+  
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .unit-section {
+    padding: var(--spacing-md);
+  }
+  
+  .tabs {
+    overflow-x: auto;
+  }
+}
