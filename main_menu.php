@@ -81,7 +81,7 @@ if (isset($_SESSION['user_id'])) {
       .btn-secondary {
             background: var(#a78bfa);
             color: white;
-            box-shadow: var(-0 10px 15px -3px rgba(0, 0, 0, 0.04));
+            box-shadow: var(-0 10px 15px -3px rgba(233, 14, 14, 0.04));
             position: relative;
             overflow: hidden;
             border: 3px solid;
